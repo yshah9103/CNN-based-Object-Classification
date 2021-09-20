@@ -40,7 +40,9 @@ The second step is to cluster all of the feature descriptors collected in the fi
 
 ![Screenshot from 2021-09-20 12-14-59](https://user-images.githubusercontent.com/74123050/134036953-0e02cce7-fb6a-41c0-b4e9-9e493c725771.png)
 
-# Histogram of Featues
+# Principle Component Analysis (PCA) and Support Vector Machine (SVM) based Classification
+
+### Histogram of Features
 
 Histograms of features is a system based on combined frequency histograms of image patch feature descriptions. This method creates a uniform feature description for each image, making it suitable as an input for a machine learning model. Finding an image description using histograms of image patches can theoretically describe the entire image without much information loss. The feature descriptors used for this method were FREAK, ORB, and HOG. 
 
@@ -50,3 +52,44 @@ First, the image is resized to decrease computation time. After some experiments
 
 
 ![Screenshot from 2021-09-20 12-19-58](https://user-images.githubusercontent.com/74123050/134037724-a7594bd6-630d-4966-bcbb-334d76e48e4f.png)
+
+The image description was run through a Principal Component Analysis (PCA). PCA essentially reduces the size of the image description to a desired number of components. The image descriptors are ordered based on their influence on the overall image description and the  image descriptors within a certain variance range were  selected. We tested this implementation for 500, 800, 1000, and 5000 components.
+
+Finally, the resulting image descriptions would be used to train a support vector machine(SVM), which is a machine learning algorithm for object classification. After labeling the training images appropriately based on their class (car vs non-car), the SVM is used to classify the images as car or non-car images.
+
+### Histogram of Gradients
+
+Histogram of Gradients(HOG) is a global descriptor that is used to describe an image based on edge orientations. It is an effective method of describing an image since it preserves edge information very well. For an image of size 512x512, the HOG feature descriptor shape for an image is (1, 8192).
+
+
+![Screenshot from 2021-09-20 12-25-02](https://user-images.githubusercontent.com/74123050/134038703-b1465c0e-e11c-4bf4-acba-d76d499f00b8.png)
+
+The resultant feature description after PCA is used to train the machine learning classifier which in this case was an SVM.
+
+# Convolutional Neural Network (CNN) based Classification
+
+The primary reason we implemented a version of a convolutional neural network was to compare the effectiveness of hand-crafted feature descriptors to the performance of the learned features from convolutional neural networks. We also wished to understand the generalizability of the “crafted” and “learned” features  when testing them with augmented images. For the purpose of comparison, our team decided to implement AlexNet (Krizhevsky, 2012) from scratch instead of using a pre-trained model. We did this to interpret the generalizability of a particular type of object’s feature descriptors.
+With respect to the implementation of AlexNet (Krizhevsky, 2012), there are a total of 11 layers. Typically, the convolutional layers are a variety of convolutional layers with different filters & window sizes, pooling, and batch normalization. After several convolutional layers, there is a flatten layer that converts the two-dimensional matrix into a one-dimensional array to be used as an input for fully connected layers used for classification. To implement a more scalable model given our resources, we chose to use three convolutional layers of different filter sizes - 96 -> 256 -> 128 instead of the filters used in AlexNet. The fully connected layers were the same as the ones in AlexNet, and the output layer had two nodes in order to get a prediction probability for both classes given an image.
+
+# Data Augmentation
+
+We applied each of the following augmentations, creating a new image after each augmentation.
+
+Increasing brightness by 1.75 times.
+Horizontally flipping the image.
+Zooming into the image by 1.25 times.
+Rotating the image by 0 to 30 degrees.
+Combining zoom by 1.25 times, rotation (0-30 degrees), and brightness by 1.75 times.
+
+![Screenshot from 2021-09-20 12-33-07](https://user-images.githubusercontent.com/74123050/134039586-00faa9cb-317b-4e27-a263-2753cb3bfc45.png)
+
+
+# Results
+
+The accuracy metrics that we used to evaluate our car recognition systems were precision, recall, F1 score, and ROC AUC score.
+
+
+![Screenshot from 2021-09-20 12-35-59](https://user-images.githubusercontent.com/74123050/134040084-31aa234e-fd9d-4448-8311-202dd483f04c.png)
+
+![Screenshot from 2021-09-20 12-37-22](https://user-images.githubusercontent.com/74123050/134040179-800dc1d7-8c67-4164-929f-2e07b1c6b20d.png)
+
