@@ -3,6 +3,9 @@ Computer Vision Project (CS/RBE 549 at WPI)
 
 The goal of our project was to compare car recognition accuracy between convolutional networks and systems that used traditional computer vision methods. We also aimed to compare how their accuracy changed when they were tested with different augmented images.
 
+##Approach
+
+
 ![Screenshot from 2021-09-20 11-55-23](https://user-images.githubusercontent.com/74123050/134033911-d8d39c21-cc29-46fb-9427-1cb41896b91d.png)
 )
 
